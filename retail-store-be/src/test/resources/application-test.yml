@@ -1,0 +1,24 @@
+retail-store:
+  db:
+    name: retailstore_test
+    username: sa
+    password: sa
+
+server:
+  port: 6667
+
+spring:
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:${retail-store.db.name};DB_CLOSE_DELAY=-1
+    username: ${retail-store.db.username}
+    password: ${retail-store.db.password}
+    database: h2
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: update
