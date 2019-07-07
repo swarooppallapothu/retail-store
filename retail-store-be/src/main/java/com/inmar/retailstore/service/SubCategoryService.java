@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * Created by Swaroop Pallapothu on Jul, 2019
  */
-public interface SubCategoryService extends AbstractService<SubCategory> {
+public interface SubCategoryService extends AbstractService<SubCategory, UiSubCategory> {
 
     ResponseDto<List<UiSubCategory>> search(RequestDto request);
 

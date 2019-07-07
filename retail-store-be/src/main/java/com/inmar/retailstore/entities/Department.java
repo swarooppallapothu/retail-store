@@ -36,7 +36,8 @@ public class Department extends AbstractEntity {
     }
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "location_id", referencedColumnName = "id", foreignKey = @ForeignKey(name = "fk_department_location"))
+    @JoinColumn(name = "location_id", referencedColumnName = "id",
+            foreignKey = @ForeignKey(name = "fk_department_location"), nullable = false)
     public Location getLocation() {
         return location;
     }

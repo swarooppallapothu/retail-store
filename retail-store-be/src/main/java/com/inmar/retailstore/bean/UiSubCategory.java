@@ -1,7 +1,5 @@
 package com.inmar.retailstore.bean;
 
-import java.util.List;
-
 /**
  * Created by Swaroop Pallapothu on Jul, 2019
  */
@@ -11,7 +9,7 @@ public class UiSubCategory extends UiAbstractBean {
 
     private String description;
 
-    private UiCategory uiCategory;
+    private UiCategory category;
 
     public String getName() {
         return name;
@@ -29,11 +27,11 @@ public class UiSubCategory extends UiAbstractBean {
         this.description = description;
     }
 
-    public UiCategory getUiCategory() {
-        return uiCategory;
+    public UiCategory getCategory() {
+        return category;
     }
 
-    public void setUiCategory(UiCategory uiCategory) {
-        this.uiCategory = uiCategory;
+    public void setCategory(UiCategory category) {
+        this.category = category;
     }
 }

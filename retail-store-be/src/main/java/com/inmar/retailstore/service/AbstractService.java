@@ -6,17 +6,17 @@ import java.util.UUID;
 /**
  * Created by Swaroop Pallapothu on Jul, 2019
  */
-public interface AbstractService<T> {
+public interface AbstractService<E, B> {
 
-    T get(UUID id);
+    B get(UUID id);
 
-    List<T> getAll();
+    List<B> getAll();
 
-    List<T> get(List<UUID> ids);
+    List<B> get(List<UUID> ids);
 
-    void saveOrUpdate(T entity);
+    B saveOrUpdate(B bean);
 
-    void saveOrUpdate(List<T> entities);
+    List<B> saveOrUpdate(List<B> beans);
 
     void delete(UUID id);
 

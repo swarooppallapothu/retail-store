@@ -15,7 +15,7 @@ import java.util.UUID;
 /**
  * Created by Swaroop Pallapothu on Jul, 2019
  */
-public abstract class AbstractResource<T> {
+public abstract class AbstractResource<E, B> {
 
     public final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
@@ -26,9 +26,9 @@ public abstract class AbstractResource<T> {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ResponseDto<T>> get(@PathVariable(name = "id") UUID id) {
+    public ResponseEntity<ResponseDto<B>> get(@PathVariable(name = "id") UUID id) {
         try {
-            return ResponseEntity.ok(CommonUtils.buildResponse(ResponseDto.ResponseCode.SUCCESS, (T) abstractService.get(id)));
+            return ResponseEntity.ok(CommonUtils.buildResponse(ResponseDto.ResponseCode.SUCCESS, (B) abstractService.get(id)));
         } catch (Exception e) {
             LOGGER.error("Exception occurred in method get with id:" + id, e);
             return new ResponseEntity<>(CommonUtils.buildResponse(ResponseDto.ResponseCode.ERROR), HttpStatus.BAD_REQUEST);
@@ -36,7 +36,7 @@ public abstract class AbstractResource<T> {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<ResponseDto<List<T>>> getAll() {
+    public ResponseEntity<ResponseDto<List<B>>> getAll() {
         try {
             return ResponseEntity.ok(CommonUtils.buildResponse(ResponseDto.ResponseCode.SUCCESS, abstractService.getAll()));
         } catch (Exception e) {
@@ -46,10 +46,10 @@ public abstract class AbstractResource<T> {
     }
 
     @PostMapping
-    public ResponseEntity<ResponseDto<T>> insert(@RequestBody T entity) {
+    public ResponseEntity<ResponseDto<B>> insert(@RequestBody B bean) {
         try {
-            abstractService.saveOrUpdate(entity);
-            return ResponseEntity.ok(CommonUtils.buildResponse(ResponseDto.ResponseCode.SUCCESS, entity));
+            bean = (B) abstractService.saveOrUpdate(bean);
+            return ResponseEntity.ok(CommonUtils.buildResponse(ResponseDto.ResponseCode.SUCCESS, bean));
         } catch (Exception e) {
             LOGGER.error("Exception occurred in method insert", e);
             return new ResponseEntity<>(CommonUtils.buildResponse(ResponseDto.ResponseCode.ERROR), HttpStatus.BAD_REQUEST);
@@ -57,10 +57,10 @@ public abstract class AbstractResource<T> {
     }
 
     @PutMapping
-    public ResponseEntity<ResponseDto<T>> update(@RequestBody T entity) {
+    public ResponseEntity<ResponseDto<B>> update(@RequestBody B bean) {
         try {
-            abstractService.saveOrUpdate(entity);
-            return ResponseEntity.ok(CommonUtils.buildResponse(ResponseDto.ResponseCode.SUCCESS, entity));
+            bean = (B) abstractService.saveOrUpdate(bean);
+            return ResponseEntity.ok(CommonUtils.buildResponse(ResponseDto.ResponseCode.SUCCESS, bean));
         } catch (Exception e) {
             LOGGER.error("Exception occurred in method update", e);
             return new ResponseEntity<>(CommonUtils.buildResponse(ResponseDto.ResponseCode.ERROR), HttpStatus.BAD_REQUEST);

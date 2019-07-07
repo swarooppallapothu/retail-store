@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * Created by Swaroop Pallapothu on Jul, 2019
  */
-public interface CategoryService extends AbstractService<Category> {
+public interface CategoryService extends AbstractService<Category, UiCategory> {
 
     ResponseDto<List<UiCategory>> search(RequestDto request);
 

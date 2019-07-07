@@ -1,5 +1,6 @@
 package com.inmar.retailstore.controller;
 
+import com.inmar.retailstore.bean.UiDepartment;
 import com.inmar.retailstore.entities.Department;
 import com.inmar.retailstore.entities.Location;
 import com.inmar.retailstore.service.DepartmentService;
@@ -12,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping(value = "/api/department")
-public class DepartmentResource extends AbstractResource<Department> {
+public class DepartmentResource extends AbstractResource<Department, UiDepartment> {
 
     private final DepartmentService departmentService;
 

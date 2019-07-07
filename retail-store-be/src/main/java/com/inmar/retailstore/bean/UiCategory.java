@@ -11,7 +11,7 @@ public class UiCategory extends UiAbstractBean {
 
     private String description;
 
-    private UiDepartment uiDepartment;
+    private UiDepartment department;
 
     private List<UiSubCategory> subCategories;
 
@@ -31,12 +31,12 @@ public class UiCategory extends UiAbstractBean {
         this.description = description;
     }
 
-    public UiDepartment getUiDepartment() {
-        return uiDepartment;
+    public UiDepartment getDepartment() {
+        return department;
     }
 
-    public void setUiDepartment(UiDepartment uiDepartment) {
-        this.uiDepartment = uiDepartment;
+    public void setDepartment(UiDepartment department) {
+        this.department = department;
     }
 
     public List<UiSubCategory> getSubCategories() {

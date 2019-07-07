@@ -1,5 +1,6 @@
 package com.inmar.retailstore.controller;
 
+import com.inmar.retailstore.bean.UiCategory;
 import com.inmar.retailstore.entities.Category;
 import com.inmar.retailstore.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping(value = "/api/category")
-public class CategoryResource extends AbstractResource<Category> {
+public class CategoryResource extends AbstractResource<Category, UiCategory> {
 
     private final CategoryService categoryService;
 

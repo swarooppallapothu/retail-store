@@ -1,5 +1,6 @@
 package com.inmar.retailstore.controller;
 
+import com.inmar.retailstore.bean.UiLocation;
 import com.inmar.retailstore.entities.Location;
 import com.inmar.retailstore.service.LocationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping(value = "/api/location")
-public class LocationResource extends AbstractResource<Location> {
+public class LocationResource extends AbstractResource<Location, UiLocation> {
 
     private final LocationService locationService;
 

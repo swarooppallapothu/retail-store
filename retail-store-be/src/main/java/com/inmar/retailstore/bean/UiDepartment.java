@@ -9,7 +9,7 @@ public class UiDepartment extends UiAbstractBean {
 
     private String description;
 
-    private UiLocation uiLocation;
+    private UiLocation location;
 
     public String getName() {
         return name;
@@ -27,11 +27,11 @@ public class UiDepartment extends UiAbstractBean {
         this.description = description;
     }
 
-    public UiLocation getUiLocation() {
-        return uiLocation;
+    public UiLocation getLocation() {
+        return location;
     }
 
-    public void setUiLocation(UiLocation uiLocation) {
-        this.uiLocation = uiLocation;
+    public void setLocation(UiLocation location) {
+        this.location = location;
     }
 }

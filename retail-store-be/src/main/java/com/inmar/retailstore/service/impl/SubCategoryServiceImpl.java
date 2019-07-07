@@ -3,6 +3,7 @@ package com.inmar.retailstore.service.impl;
 import com.inmar.retailstore.bean.UiSubCategory;
 import com.inmar.retailstore.bean.dto.RequestDto;
 import com.inmar.retailstore.bean.dto.ResponseDto;
+import com.inmar.retailstore.converter.SubCategoryConverter;
 import com.inmar.retailstore.entities.SubCategory;
 import com.inmar.retailstore.repository.SubCategoryRepository;
 import com.inmar.retailstore.service.SubCategoryService;
@@ -15,14 +16,16 @@ import java.util.List;
  * Created by Swaroop Pallapothu on Jul, 2019
  */
 @Service
-public class SubCategoryServiceImpl extends AbstractServiceImpl<SubCategory> implements SubCategoryService {
+public class SubCategoryServiceImpl extends AbstractServiceImpl<SubCategory, UiSubCategory> implements SubCategoryService {
 
     private final SubCategoryRepository subCategoryRepository;
+    private final SubCategoryConverter subCategoryConverter;
 
     @Autowired
-    public SubCategoryServiceImpl(SubCategoryRepository subCategoryRepository) {
-        super(subCategoryRepository);
+    public SubCategoryServiceImpl(SubCategoryRepository subCategoryRepository, SubCategoryConverter subCategoryConverter) {
+        super(subCategoryRepository, subCategoryConverter);
         this.subCategoryRepository = subCategoryRepository;
+        this.subCategoryConverter = subCategoryConverter;
     }
 
     @Override

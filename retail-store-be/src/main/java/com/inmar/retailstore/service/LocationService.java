@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * Created by Swaroop Pallapothu on Jul, 2019
  */
-public interface LocationService extends AbstractService<Location> {
+public interface LocationService extends AbstractService<Location, UiLocation> {
 
     ResponseDto<List<UiLocation>> search(RequestDto request);
 

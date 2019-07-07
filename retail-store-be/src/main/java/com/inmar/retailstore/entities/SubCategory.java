@@ -38,7 +38,7 @@ public class SubCategory extends AbstractEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id", referencedColumnName = "id",
-            foreignKey = @ForeignKey(name = "fk_sub_category_category"))
+            foreignKey = @ForeignKey(name = "fk_sub_category_category"), nullable = false)
     public Category getCategory() {
         return category;
     }
