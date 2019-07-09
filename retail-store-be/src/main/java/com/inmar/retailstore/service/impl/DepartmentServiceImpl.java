@@ -1,16 +1,16 @@
 package com.inmar.retailstore.service.impl;
 
 import com.inmar.retailstore.bean.UiDepartment;
-import com.inmar.retailstore.bean.dto.RequestDto;
-import com.inmar.retailstore.bean.dto.ResponseDto;
 import com.inmar.retailstore.converter.DepartmentConverter;
 import com.inmar.retailstore.entities.Department;
 import com.inmar.retailstore.repository.DepartmentRepository;
 import com.inmar.retailstore.service.DepartmentService;
+import com.inmar.retailstore.util.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Created by Swaroop Pallapothu on Jul, 2019
@@ -29,7 +29,7 @@ public class DepartmentServiceImpl extends AbstractServiceImpl<Department, UiDep
     }
 
     @Override
-    public ResponseDto<List<UiDepartment>> search(RequestDto request) {
-        return null;
+    public List<UiDepartment> getAllByLocation(UUID locationId) {
+        return departmentConverter.getBeansFromEntities(departmentRepository.getAllByLocation(locationId), Constants.ResultType.SELECTION);
     }
 }

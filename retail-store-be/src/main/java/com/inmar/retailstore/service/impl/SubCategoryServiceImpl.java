@@ -1,16 +1,16 @@
 package com.inmar.retailstore.service.impl;
 
 import com.inmar.retailstore.bean.UiSubCategory;
-import com.inmar.retailstore.bean.dto.RequestDto;
-import com.inmar.retailstore.bean.dto.ResponseDto;
 import com.inmar.retailstore.converter.SubCategoryConverter;
 import com.inmar.retailstore.entities.SubCategory;
 import com.inmar.retailstore.repository.SubCategoryRepository;
 import com.inmar.retailstore.service.SubCategoryService;
+import com.inmar.retailstore.util.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Created by Swaroop Pallapothu on Jul, 2019
@@ -29,7 +29,7 @@ public class SubCategoryServiceImpl extends AbstractServiceImpl<SubCategory, UiS
     }
 
     @Override
-    public ResponseDto<List<UiSubCategory>> search(RequestDto request) {
-        return null;
+    public List<UiSubCategory> getAllByCategory(UUID categoryId) {
+        return subCategoryConverter.getBeansFromEntities(subCategoryRepository.getAllByCategory(categoryId), Constants.ResultType.SELECTION);
     }
 }
