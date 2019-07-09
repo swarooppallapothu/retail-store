@@ -8,10 +8,7 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 /**
  * Created by Swaroop Pallapothu on Jul, 2019
@@ -42,19 +39,6 @@ public class CategoryConverter extends AbstractConverter<Category, UiCategory> {
         entity.setSubCategories(subCategoryConverter.getEntitiesFromBeans(bean.getSubCategories()));
         mapCommonFields(bean, entity);
         return entity;
-    }
-
-    @Override
-    public List<UiCategory> getBeansFromEntities(List<Category> entities, Constants.ResultType resultType) {
-        List<UiCategory> beans = new ArrayList();
-        if (CollectionUtils.isEmpty(entities)) {
-            return beans;
-        }
-        beans = entities.stream()
-                .map(el -> getBeanFromEntity(el, resultType))
-                .filter(el -> !Objects.isNull(el))
-                .collect(Collectors.toList());
-        return beans;
     }
 
     @Override

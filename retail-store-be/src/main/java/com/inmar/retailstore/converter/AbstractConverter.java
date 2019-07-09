@@ -29,7 +29,17 @@ public abstract class AbstractConverter<E, B> {
         return entities;
     }
 
-    public abstract List<B> getBeansFromEntities(List<E> entities, Constants.ResultType resultType);
+    public List<B> getBeansFromEntities(List<E> entities, Constants.ResultType resultType) {
+        List<B> beans = new ArrayList();
+        if (CollectionUtils.isEmpty(entities)) {
+            return beans;
+        }
+        beans = entities.stream()
+                .map(el -> getBeanFromEntity(el, resultType))
+                .filter(el -> !Objects.isNull(el))
+                .collect(Collectors.toList());
+        return beans;
+    }
 
     public abstract B getBeanFromEntity(E entity, Constants.ResultType resultType);
 

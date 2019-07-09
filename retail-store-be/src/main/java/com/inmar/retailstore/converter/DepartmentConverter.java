@@ -40,19 +40,6 @@ public class DepartmentConverter extends AbstractConverter<Department, UiDepartm
     }
 
     @Override
-    public List<UiDepartment> getBeansFromEntities(List<Department> entities, Constants.ResultType resultType) {
-        List<UiDepartment> beans = new ArrayList();
-        if (CollectionUtils.isEmpty(entities)) {
-            return beans;
-        }
-        beans = entities.stream()
-                .map(el -> getBeanFromEntity(el, resultType))
-                .filter(el -> !Objects.isNull(el))
-                .collect(Collectors.toList());
-        return beans;
-    }
-
-    @Override
     public UiDepartment getBeanFromEntity(Department entity, Constants.ResultType resultType) {
         UiDepartment bean = null;
         if (Objects.isNull(entity)) {

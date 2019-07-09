@@ -6,12 +6,8 @@ import com.inmar.retailstore.util.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 /**
  * Created by Swaroop Pallapothu on Jul, 2019
@@ -38,19 +34,6 @@ public class SubCategoryConverter extends AbstractConverter<SubCategory, UiSubCa
         entity.setCategory(categoryConverter.getEntityFromBean(bean.getCategory()));
         mapCommonFields(bean, entity);
         return entity;
-    }
-
-    @Override
-    public List<UiSubCategory> getBeansFromEntities(List<SubCategory> entities, Constants.ResultType resultType) {
-        List<UiSubCategory> beans = new ArrayList();
-        if (CollectionUtils.isEmpty(entities)) {
-            return beans;
-        }
-        beans = entities.stream()
-                .map(el -> getBeanFromEntity(el, resultType))
-                .filter(el -> !Objects.isNull(el))
-                .collect(Collectors.toList());
-        return beans;
     }
 
     @Override

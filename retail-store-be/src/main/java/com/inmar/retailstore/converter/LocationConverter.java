@@ -31,19 +31,6 @@ public class LocationConverter extends AbstractConverter<Location, UiLocation> {
     }
 
     @Override
-    public List<UiLocation> getBeansFromEntities(List<Location> entities, Constants.ResultType resultType) {
-        List<UiLocation> beans = new ArrayList();
-        if (CollectionUtils.isEmpty(entities)) {
-            return beans;
-        }
-        beans = entities.stream()
-                .map(el -> getBeanFromEntity(el, resultType))
-                .filter(el -> !Objects.isNull(el))
-                .collect(Collectors.toList());
-        return beans;
-    }
-
-    @Override
     public UiLocation getBeanFromEntity(Location entity, Constants.ResultType resultType) {
         UiLocation bean = null;
         if (Objects.isNull(entity)) {
