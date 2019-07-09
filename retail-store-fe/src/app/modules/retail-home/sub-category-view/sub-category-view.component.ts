@@ -5,6 +5,9 @@ import { BehaviorSubject, Observable, of, Subject } from 'rxjs';
 import { catchError, takeUntil } from 'rxjs/operators';
 import { SkuDetails } from 'src/app/models/sku-details.model';
 import { SkuDetailsService } from 'src/app/services/sku-details.service';
+import { SkuDetailsComponent } from '../sku-details-view/sku-details/sku-details.component';
+import { MatDialog } from '@angular/material';
+import { ObjectTreeService } from 'src/app/services/object-tree.service';
 
 @Component({
   selector: 'app-sub-category-view',
@@ -18,9 +21,13 @@ export class SubCategoryViewComponent implements OnInit, OnDestroy {
 
   subCategoryId: string;
 
+  dialogRef: any;
+
   private _unsubscribeAll: Subject<any>;
   constructor(private _activatedRoute: ActivatedRoute,
-    private _skuDetailsService: SkuDetailsService) {
+    private _skuDetailsService: SkuDetailsService,
+    public _matDialog: MatDialog,
+    private _objectTreeService: ObjectTreeService) {
 
     this._unsubscribeAll = new Subject();
   }
@@ -45,6 +52,43 @@ export class SubCategoryViewComponent implements OnInit, OnDestroy {
 
   loadSkuDetails() {
     this.dataSource.loadSkuDetails(this.subCategoryId);
+  }
+
+  showObjectDetails(skuDetails?: SkuDetails) {
+    this.dialogRef = this._matDialog.open(SkuDetailsComponent, {
+      width: '600px',
+      height: '420px',
+      data: skuDetails || {}
+    });
+
+    this.dialogRef.afterClosed().subscribe(result => {
+      if (result && result.safeClose) {
+        this.saveDepartment(result.data);
+      }
+    });
+
+  }
+
+  saveDepartment(skuDetails: SkuDetails) {
+    if (!skuDetails) {
+      return;
+    }
+
+    if (skuDetails.id) {
+      this._skuDetailsService.updateSkuDetails(skuDetails).subscribe((response) => {
+        this.loadSkuDetails();
+        this._objectTreeService.nodeModified();
+      });
+    } else {
+      skuDetails.subCategory = {
+        id: this.subCategoryId
+      };
+      this._skuDetailsService.saveSkuDetails(skuDetails).subscribe((response) => {
+        this.loadSkuDetails();
+        this._objectTreeService.nodeModified();
+      });
+    }
+
   }
 
 }

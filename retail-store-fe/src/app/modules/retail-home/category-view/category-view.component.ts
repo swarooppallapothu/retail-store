@@ -5,6 +5,9 @@ import { BehaviorSubject, Observable, of, Subject } from 'rxjs';
 import { catchError, takeUntil } from 'rxjs/operators';
 import { SubCategory } from 'src/app/models/sub-category.model';
 import { SubCategoryService } from 'src/app/services/sub-category.service';
+import { SubCategoryDetailsComponent } from '../sub-category-view/sub-category-details/sub-category-details.component';
+import { MatDialog } from '@angular/material';
+import { ObjectTreeService } from 'src/app/services/object-tree.service';
 
 
 @Component({
@@ -19,9 +22,13 @@ export class CategoryViewComponent implements OnInit, OnDestroy {
 
   categoryId: string;
 
+  dialogRef: any;
+
   private _unsubscribeAll: Subject<any>;
   constructor(private _activatedRoute: ActivatedRoute,
-    private _subCategoryService: SubCategoryService) {
+    private _subCategoryService: SubCategoryService,
+    public _matDialog: MatDialog,
+    private _objectTreeService: ObjectTreeService) {
 
     this._unsubscribeAll = new Subject();
   }
@@ -46,6 +53,43 @@ export class CategoryViewComponent implements OnInit, OnDestroy {
 
   loadSubCategories() {
     this.dataSource.loadSubCategories(this.categoryId);
+  }
+
+  showObjectDetails(subCategory?: SubCategory) {
+    this.dialogRef = this._matDialog.open(SubCategoryDetailsComponent, {
+      width: '600px',
+      height: '420px',
+      data: subCategory || {}
+    });
+
+    this.dialogRef.afterClosed().subscribe(result => {
+      if (result && result.safeClose) {
+        this.saveDepartment(result.data);
+      }
+    });
+
+  }
+
+  saveDepartment(subCategory: SubCategory) {
+    if (!subCategory) {
+      return;
+    }
+
+    if (subCategory.id) {
+      this._subCategoryService.updateSubCategory(subCategory).subscribe((response) => {
+        this.loadSubCategories();
+        this._objectTreeService.nodeModified();
+      });
+    } else {
+      subCategory.category = {
+        id: this.categoryId
+      };
+      this._subCategoryService.saveSubCategory(subCategory).subscribe((response) => {
+        this.loadSubCategories();
+        this._objectTreeService.nodeModified();
+      });
+    }
+
   }
 
 }

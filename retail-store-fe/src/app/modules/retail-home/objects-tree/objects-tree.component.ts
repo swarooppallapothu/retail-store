@@ -12,6 +12,7 @@ import { CategoryService } from 'src/app/services/category.service';
 import { Category } from 'src/app/models/category.model';
 import { SubCategoryService } from 'src/app/services/sub-category.service';
 import { SubCategory } from 'src/app/models/sub-category.model';
+import { ObjectTreeService } from 'src/app/services/object-tree.service';
 
 interface ObjectDetails {
   id: string;
@@ -43,19 +44,28 @@ export class ObjectsTreeComponent implements OnInit {
   constructor(private locationService: LocationService,
     private departmentService: DepartmentService,
     private categoryService: CategoryService,
-    private subCategoryService: SubCategoryService) {
+    private subCategoryService: SubCategoryService,
+    private objectTreeService: ObjectTreeService) {
     this.treeControl = new FlatTreeControl<DynamicFlatNode>(this.getLevel, this.isExpandable);
-    this.dataSource = new DynamicDataSource(this.treeControl, locationService, departmentService, categoryService, subCategoryService);
+    this.dataSource = new DynamicDataSource(this.treeControl, this.locationService, this.departmentService, this.categoryService, this.subCategoryService);
 
     this.dataSource.data = TREE_DEFAULT_NODES.map(obj => new DynamicFlatNode(obj.name, 0, true, obj));
 
   }
 
   ngOnInit() {
-
+    this.objectTreeService.onNodeModified
+      .subscribe((modifiedNode: DynamicFlatNode) => {
+        let modifiedNodeInd = this.dataSource.data.indexOf(modifiedNode);
+        if (modifiedNodeInd > -1) {
+          this.treeControl.collapse(modifiedNode);
+          this.treeControl.expand(modifiedNode);
+        }
+      });
   }
 
   onNodeClick(node: DynamicFlatNode) {
+    this.objectTreeService.setSelectedNode(node);
     this.onNodeClickEvent.emit(node);
   }
 

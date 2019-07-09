@@ -4,6 +4,9 @@ import { BehaviorSubject, Observable, of } from 'rxjs';
 import { Location } from 'src/app/models/location.model';
 import { LocationService } from 'src/app/services/location.service';
 import { catchError } from 'rxjs/operators';
+import { MatDialog } from '@angular/material';
+import { LocationDetailsComponent } from '../location-view/location-details/location-details.component';
+import { ObjectTreeService } from 'src/app/services/object-tree.service';
 
 @Component({
   selector: 'app-root-view',
@@ -16,7 +19,11 @@ export class RootViewComponent implements OnInit {
 
   dataSource: LocationDataSource | null;
 
-  constructor(public locationService: LocationService) {
+  dialogRef: any;
+
+  constructor(private locationService: LocationService,
+    public _matDialog: MatDialog,
+    private _objectTreeService: ObjectTreeService) {
 
   }
 
@@ -28,6 +35,40 @@ export class RootViewComponent implements OnInit {
 
   loadLocations() {
     this.dataSource.loadLocations();
+  }
+
+  showObjectDetails(locationDetails?: Location) {
+    this.dialogRef = this._matDialog.open(LocationDetailsComponent, {
+      width: '600px',
+      height: '420px',
+      data: locationDetails || {}
+    });
+
+    this.dialogRef.afterClosed().subscribe(result => {
+      if (result && result.safeClose) {
+        this.saveLocation(result.data);
+      }
+    });
+
+  }
+
+  saveLocation(location: Location) {
+    if (!location) {
+      return;
+    }
+
+    if (location.id) {
+      this.locationService.updateLocation(location).subscribe((response) => {
+        this.loadLocations();
+        this._objectTreeService.nodeModified();
+      });
+    } else {
+      this.locationService.saveLocation(location).subscribe((response) => {
+        this.loadLocations();
+        this._objectTreeService.nodeModified();
+      });
+    }
+
   }
 
 }

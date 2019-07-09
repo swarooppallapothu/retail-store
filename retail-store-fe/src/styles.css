@@ -88,10 +88,6 @@ body {
   font-family: Roboto, sans-serif;
 }
 
-/* .app {
-  height: 100vh;
-} */
-
 app-root {
   position: relative;
   display: flex;
@@ -100,18 +96,6 @@ app-root {
   height: 100%;
   min-width: 0;
 }
-
-/* content {
-  position: relative;
-  display: flex;
-  z-index: 1;
-  flex: 1 0 auto;
-  height: calc(100vh - 64px);
-}
-
-content :not(router-outlet) {
-  width: 100%;
-} */
 
 .page-layout.carded.fullwidth.inner-scroll, .page-layout.carded.fullwidth.inner-scroll>.center, .page-layout.carded.fullwidth.inner-scroll>.center>.content-card {
   flex: 1 1 auto;
@@ -134,4 +118,20 @@ content :not(router-outlet) {
   height: 50px!important;
   min-height: 50px!important;
   max-height: 50px!important;
+}
+
+.p-24 {
+  padding: 24px!important;
+}
+
+.p-16 {
+  padding: 16px!important;
+}
+
+.m-0 {
+  margin: 0!important;
+}
+
+.mat-dialog-container {
+  padding: 0 !important;
 }

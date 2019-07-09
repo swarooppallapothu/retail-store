@@ -5,6 +5,9 @@ import { BehaviorSubject, Observable, of, Subject } from 'rxjs';
 import { DepartmentService } from 'src/app/services/department.service';
 import { Department } from 'src/app/models/department.model';
 import { catchError, takeUntil } from 'rxjs/operators';
+import { ObjectTreeService } from 'src/app/services/object-tree.service';
+import { MatDialog } from '@angular/material';
+import { DepartmentDetailsComponent } from '../department-view/department-details/department-details.component';
 
 @Component({
   selector: 'app-location-view',
@@ -19,9 +22,13 @@ export class LocationViewComponent implements OnInit, OnDestroy {
 
   locationId: string;
 
+  dialogRef: any;
+
   private _unsubscribeAll: Subject<any>;
   constructor(private _activatedRoute: ActivatedRoute,
-    private _departmentService: DepartmentService) {
+    private _departmentService: DepartmentService,
+    public _matDialog: MatDialog,
+    private _objectTreeService: ObjectTreeService) {
 
     this._unsubscribeAll = new Subject();
   }
@@ -48,6 +55,42 @@ export class LocationViewComponent implements OnInit, OnDestroy {
     this.dataSource.loadDepartments(this.locationId);
   }
 
+  showObjectDetails(department?: Department) {
+    this.dialogRef = this._matDialog.open(DepartmentDetailsComponent, {
+      width: '600px',
+      height: '420px',
+      data: department || {}
+    });
+
+    this.dialogRef.afterClosed().subscribe(result => {
+      if (result && result.safeClose) {
+        this.saveDepartment(result.data);
+      }
+    });
+
+  }
+
+  saveDepartment(department: Department) {
+    if (!department) {
+      return;
+    }
+
+    if (department.id) {
+      this._departmentService.updateDepartment(department).subscribe((response) => {
+        this.loadDepartments();
+        this._objectTreeService.nodeModified();
+      });
+    } else {
+      department.location = {
+        id: this.locationId
+      };
+      this._departmentService.saveDepartment(department).subscribe((response) => {
+        this.loadDepartments();
+        this._objectTreeService.nodeModified();
+      });
+    }
+
+  }
 }
 
 
