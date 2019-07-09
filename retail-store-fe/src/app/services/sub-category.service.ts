@@ -6,8 +6,8 @@ import { Observable } from 'rxjs';
 @Injectable()
 export class SubCategoryService {
 
-    api: string = environment.api;
-    entity: string = `${this.api}/sub-category`;
+    api: string = environment.API_ENDPOINT_PREFIX;
+    entity: string = `${this.api}api/sub-category`;
 
     constructor(private http: HttpClient) {
 

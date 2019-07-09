@@ -3,6 +3,9 @@ import { Routes, RouterModule } from '@angular/router';
 import { RetailHomeComponent } from './modules/retail-home/retail-home.component';
 import { LocationViewComponent } from './modules/retail-home/location-view/location-view.component';
 import { DepartmentViewComponent } from './modules/retail-home/department-view/department-view.component';
+import { RootViewComponent } from './modules/retail-home/root-view/root-view.component';
+import { CategoryViewComponent } from './modules/retail-home/category-view/category-view.component';
+import { SubCategoryViewComponent } from './modules/retail-home/sub-category-view/sub-category-view.component';
 
 const routes: Routes = [
   {
@@ -10,12 +13,27 @@ const routes: Routes = [
     component: RetailHomeComponent,
     children: [                          //<---- child components declared here
       {
-        path: 'location-view',
+        path: 'root-view',
+        component: RootViewComponent
+      },
+      {
+        path: 'location-view/:id',
         component: LocationViewComponent
       },
       {
-        path: 'department-view',
+        path: 'department-view/:id',
         component: DepartmentViewComponent
+      },
+      {
+        path: 'category-view/:id',
+        component: CategoryViewComponent
+      },
+      {
+        path: 'sub-category-view/:id',
+        component: SubCategoryViewComponent
+      }, {
+        path: '**',
+        redirectTo: 'root-view'
       }
     ]
   }, {

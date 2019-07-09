@@ -3,37 +3,36 @@ import { ActivatedRoute } from '@angular/router';
 import { DataSource } from '@angular/cdk/table';
 import { BehaviorSubject, Observable, of, Subject } from 'rxjs';
 import { catchError, takeUntil } from 'rxjs/operators';
-import { Category } from 'src/app/models/category.model';
-import { CategoryService } from 'src/app/services/category.service';
+import { SkuDetails } from 'src/app/models/sku-details.model';
+import { SkuDetailsService } from 'src/app/services/sku-details.service';
 
 @Component({
-  selector: 'app-department-view',
-  templateUrl: './department-view.component.html',
-  styleUrls: ['./department-view.component.css']
+  selector: 'app-sub-category-view',
+  templateUrl: './sub-category-view.component.html',
+  styleUrls: ['./sub-category-view.component.css']
 })
-export class DepartmentViewComponent implements OnInit, OnDestroy {
-
+export class SubCategoryViewComponent implements OnInit, OnDestroy {
   displayedColumns: string[] = ['name', 'description'];
 
-  dataSource: CategoryDataSource | null;
+  dataSource: SkuDetailsDataSource | null;
 
-  departmentId: string;
+  subCategoryId: string;
 
   private _unsubscribeAll: Subject<any>;
   constructor(private _activatedRoute: ActivatedRoute,
-    private _categoryService: CategoryService) {
+    private _skuDetailsService: SkuDetailsService) {
 
     this._unsubscribeAll = new Subject();
   }
 
   ngOnInit() {
-    this.dataSource = new CategoryDataSource(this._categoryService);
+    this.dataSource = new SkuDetailsDataSource(this._skuDetailsService);
     this._activatedRoute.params
       .pipe(takeUntil(this._unsubscribeAll))
       .subscribe(params => {
-        this.departmentId = params.id;
+        this.subCategoryId = params.id;
 
-        this.loadCategories();
+        this.loadSkuDetails();
 
       });
   }
@@ -44,16 +43,17 @@ export class DepartmentViewComponent implements OnInit, OnDestroy {
     this._unsubscribeAll.complete();
   }
 
-  loadCategories() {
-    this.dataSource.loadCategories(this.departmentId);
+  loadSkuDetails() {
+    this.dataSource.loadSkuDetails(this.subCategoryId);
   }
 
 }
 
-export class CategoryDataSource extends DataSource<any>
+
+export class SkuDetailsDataSource extends DataSource<any>
 {
 
-  private dataSourceSubject = new BehaviorSubject<Category[]>([]);
+  private dataSourceSubject = new BehaviorSubject<SkuDetails[]>([]);
 
   /**
    * Constructor
@@ -61,7 +61,7 @@ export class CategoryDataSource extends DataSource<any>
    * @param {CategoryService} _categoryService
    */
   constructor(
-    private categoryService: CategoryService
+    private skuDetailsService: SkuDetailsService
   ) {
     super();
 
@@ -72,12 +72,12 @@ export class CategoryDataSource extends DataSource<any>
    *
    * @returns {Observable<any[]>}
    */
-  connect(): Observable<Category[]> {
+  connect(): Observable<SkuDetails[]> {
     return this.dataSourceSubject.asObservable();
   }
 
-  loadCategories(departmentId: string) {
-    this.categoryService.getByDepartment(departmentId).pipe(
+  loadSkuDetails(subCategoryId: string) {
+    this.skuDetailsService.getBySubCategory(subCategoryId).pipe(
       catchError(() => of([]))
     ).subscribe(response => {
       return this.dataSourceSubject.next(response.data)

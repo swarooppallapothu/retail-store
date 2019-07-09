@@ -1,15 +1,94 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { DataSource } from '@angular/cdk/table';
+import { BehaviorSubject, Observable, of, Subject } from 'rxjs';
+import { DepartmentService } from 'src/app/services/department.service';
+import { Department } from 'src/app/models/department.model';
+import { catchError, takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-location-view',
   templateUrl: './location-view.component.html',
   styleUrls: ['./location-view.component.css']
 })
-export class LocationViewComponent implements OnInit {
+export class LocationViewComponent implements OnInit, OnDestroy {
 
-  constructor() { }
+  displayedColumns: string[] = ['name', 'description'];
 
-  ngOnInit() {
+  dataSource: DepartmentDataSource | null;
+
+  locationId: string;
+
+  private _unsubscribeAll: Subject<any>;
+  constructor(private _activatedRoute: ActivatedRoute,
+    private _departmentService: DepartmentService) {
+
+    this._unsubscribeAll = new Subject();
   }
 
+  ngOnInit() {
+    this.dataSource = new DepartmentDataSource(this._departmentService);
+    this._activatedRoute.params
+      .pipe(takeUntil(this._unsubscribeAll))
+      .subscribe(params => {
+        this.locationId = params.id;
+
+        this.loadDepartments();
+
+      });
+  }
+
+  ngOnDestroy(): void {
+    // Unsubscribe from all subscriptions
+    this._unsubscribeAll.next();
+    this._unsubscribeAll.complete();
+  }
+
+  loadDepartments() {
+    this.dataSource.loadDepartments(this.locationId);
+  }
+
+}
+
+
+export class DepartmentDataSource extends DataSource<any>
+{
+
+  private departmentsSubject = new BehaviorSubject<Department[]>([]);
+
+  /**
+   * Constructor
+   *
+   * @param {DepartmentService} _departmentService
+   */
+  constructor(
+    private _departmentService: DepartmentService
+  ) {
+    super();
+
+  }
+
+  /**
+   * Connect function called by the table to retrieve one stream containing the data to render.
+   *
+   * @returns {Observable<any[]>}
+   */
+  connect(): Observable<Department[]> {
+    return this.departmentsSubject.asObservable();
+  }
+
+  loadDepartments(locationId: string) {
+    this._departmentService.getByLocation(locationId).pipe(
+      catchError(() => of([]))
+    ).subscribe(response => {
+      return this.departmentsSubject.next(response.data)
+    });
+  }
+
+  /**
+   * Disconnect
+   */
+  disconnect(): void {
+    this.departmentsSubject.complete();
+  }
 }

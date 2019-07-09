@@ -271,7 +271,7 @@ export class DynamicDataSource {
               id: obj.id,
               name: obj.name,
               type: 'SUB_CATEGORY',
-              showExpand: true,
+              showExpand: false,
               children: []
             }
             return objectDetails;

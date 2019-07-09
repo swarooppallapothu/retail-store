@@ -7,7 +7,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import {
   MatToolbarModule, MatSidenavModule, MatTabsModule,
-  MatTreeModule, MatIconModule, MatButtonModule, MatProgressBarModule
+  MatTreeModule, MatIconModule, MatButtonModule, MatProgressBarModule, MatCardModule, MatTableModule
 } from '@angular/material';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -21,15 +21,20 @@ import { DepartmentService } from './services/department.service';
 import { CategoryService } from './services/category.service';
 import { SubCategoryService } from './services/sub-category.service';
 import { SkuDetailsService } from './services/sku-details.service';
+import { RootViewComponent } from './modules/retail-home/root-view/root-view.component';
+import { CategoryViewComponent } from './modules/retail-home/category-view/category-view.component';
+import { SubCategoryViewComponent } from './modules/retail-home/sub-category-view/sub-category-view.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     RetailHomeComponent,
     ObjectsTreeComponent,
+    RootViewComponent,
     LocationViewComponent,
     DepartmentViewComponent,
-
+    CategoryViewComponent,
+    SubCategoryViewComponent
   ],
   imports: [
     BrowserModule,
@@ -45,7 +50,9 @@ import { SkuDetailsService } from './services/sku-details.service';
     MatTreeModule,
     MatIconModule,
     MatButtonModule,
-    MatProgressBarModule
+    MatProgressBarModule,
+    MatCardModule,
+    MatTableModule
   ],
   providers: [LocationService, DepartmentService, CategoryService, SubCategoryService, SkuDetailsService],
   bootstrap: [AppComponent]

@@ -6,8 +6,8 @@ import { Observable } from 'rxjs';
 @Injectable()
 export class SkuDetailsService {
 
-    api: string = environment.api;
-    entity: string = `${this.api}/sku-details`;
+    api: string = environment.API_ENDPOINT_PREFIX;
+    entity: string = `${this.api}api/sku-details`;
 
     constructor(private http: HttpClient) {
 

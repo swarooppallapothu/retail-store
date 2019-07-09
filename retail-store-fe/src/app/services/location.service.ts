@@ -6,8 +6,8 @@ import { Observable } from 'rxjs';
 @Injectable()
 export class LocationService {
 
-    api: string = environment.api;
-    entity: string = `${this.api}/location`;
+    api: string = environment.API_ENDPOINT_PREFIX;
+    entity: string = `${this.api}api/location`;
 
     constructor(private http: HttpClient) {
 

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { DynamicFlatNode } from './objects-tree/objects-tree.component';
+import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 
 @Component({
   selector: 'app-retail-home',
@@ -8,22 +9,37 @@ import { DynamicFlatNode } from './objects-tree/objects-tree.component';
   styleUrls: ['./retail-home.component.css']
 })
 export class RetailHomeComponent implements OnInit {
+  options: any = {
+    bottom: 0,
+    fixed: false,
+    top: 0
+  };;
 
-  view: boolean = true;
+  constructor(private router: Router) {
 
-  constructor(private router: Router) { }
+  }
+
+
 
   ngOnInit() {
   }
 
 
   onObjectsTreeNodeClick(objectNode: DynamicFlatNode) {
-    console.log(objectNode);
-    if (this.view) {
-      this.router.navigate(['/retail-home/location-view']);
-    } else {
-      this.router.navigate(['/retail-home/department-view']);
+    if (!objectNode) {
+      return;
     }
-    this.view = !this.view;
+
+    if (objectNode.objectDetails.type === 'ROOT') {
+      this.router.navigate(['/retail-home/root-view']);
+    } else if (objectNode.objectDetails.type === 'LOCATION') {
+      this.router.navigate([`/retail-home/location-view/${objectNode.objectDetails.id}`]);
+    } else if (objectNode.objectDetails.type === 'DEPARTMENT') {
+      this.router.navigate([`/retail-home/department-view/${objectNode.objectDetails.id}`]);
+    } else if (objectNode.objectDetails.type === 'CATEGORY') {
+      this.router.navigate([`/retail-home/category-view/${objectNode.objectDetails.id}`]);
+    } else if (objectNode.objectDetails.type === 'SUB_CATEGORY') {
+      this.router.navigate([`/retail-home/sub-category-view/${objectNode.objectDetails.id}`]);
+    }
   }
 }
