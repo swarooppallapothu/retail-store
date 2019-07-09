@@ -7,7 +7,7 @@ retail-store:
     password: retailstore
 
 server:
-  port: 6668
+  port: 5533
 
 spring:
   datasource:
