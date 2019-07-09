@@ -8,6 +8,10 @@ import { map } from 'rxjs/operators';
 import { Location } from 'src/app/models/location.model';
 import { DepartmentService } from 'src/app/services/department.service';
 import { Department } from 'src/app/models/department.model';
+import { CategoryService } from 'src/app/services/category.service';
+import { Category } from 'src/app/models/category.model';
+import { SubCategoryService } from 'src/app/services/sub-category.service';
+import { SubCategory } from 'src/app/models/sub-category.model';
 
 interface ObjectDetails {
   id: string;
@@ -37,9 +41,11 @@ export class ObjectsTreeComponent implements OnInit {
   @Output() public onNodeClickEvent = new EventEmitter<DynamicFlatNode>(true);
 
   constructor(private locationService: LocationService,
-    private departmentService: DepartmentService) {
+    private departmentService: DepartmentService,
+    private categoryService: CategoryService,
+    private subCategoryService: SubCategoryService) {
     this.treeControl = new FlatTreeControl<DynamicFlatNode>(this.getLevel, this.isExpandable);
-    this.dataSource = new DynamicDataSource(this.treeControl, locationService, departmentService);
+    this.dataSource = new DynamicDataSource(this.treeControl, locationService, departmentService, categoryService, subCategoryService);
 
     this.dataSource.data = TREE_DEFAULT_NODES.map(obj => new DynamicFlatNode(obj.name, 0, true, obj));
 
@@ -84,7 +90,9 @@ export class DynamicDataSource {
 
   constructor(private _treeControl: FlatTreeControl<DynamicFlatNode>,
     private _locationService: LocationService,
-    private _departmentService: DepartmentService) { }
+    private _departmentService: DepartmentService,
+    private _categoryService: CategoryService,
+    private _subCategoryService: SubCategoryService) { }
 
   connect(collectionViewer: CollectionViewer): Observable<DynamicFlatNode[]> {
     this._treeControl.expansionModel.onChange.subscribe(change => {
@@ -134,7 +142,35 @@ export class DynamicDataSource {
         );
       } else if (node.objectDetails.type === 'LOCATION') {
         Promise.all([
-          this.loadDepartmentNodes()
+          this.loadDepartmentNodes(node)
+        ]).then(
+          (data: any) => {
+            data = data instanceof Array ? data[0] : data;
+            const nodes = data.map(objectDetails => new DynamicFlatNode(objectDetails.name, node.level + 1, objectDetails.showExpand, objectDetails));
+            this.data.splice(nodeIndex + 1, 0, ...nodes);
+            this.dataChange.next(this.data);
+            node.isLoading = false;
+          }, () => {
+
+          }
+        );
+      } else if (node.objectDetails.type === 'DEPARTMENT') {
+        Promise.all([
+          this.loadCategoryNodes(node)
+        ]).then(
+          (data: any) => {
+            data = data instanceof Array ? data[0] : data;
+            const nodes = data.map(objectDetails => new DynamicFlatNode(objectDetails.name, node.level + 1, objectDetails.showExpand, objectDetails));
+            this.data.splice(nodeIndex + 1, 0, ...nodes);
+            this.dataChange.next(this.data);
+            node.isLoading = false;
+          }, () => {
+
+          }
+        );
+      } else if (node.objectDetails.type === 'CATEGORY') {
+        Promise.all([
+          this.loadSubCategoryNodes(node)
         ]).then(
           (data: any) => {
             data = data instanceof Array ? data[0] : data;
@@ -182,9 +218,9 @@ export class DynamicDataSource {
 
   }
 
-  public loadDepartmentNodes(): Promise<any> {
+  public loadDepartmentNodes(node: DynamicFlatNode): Promise<any> {
     return new Promise((resolve, reject) => {
-      this._departmentService.getAll().subscribe((response: Response<Department[]>) => {
+      this._departmentService.getByLocation(node.objectDetails.id).subscribe((response: Response<Department[]>) => {
         if (response && response.responseCode === 'SUCCESS' && response.data) {
           let data = response.data.map((obj: Department) => {
             let objectDetails: ObjectDetails = {
@@ -202,6 +238,49 @@ export class DynamicDataSource {
         }
       }, reject);
     });
+  }
 
+  public loadCategoryNodes(node: DynamicFlatNode): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this._categoryService.getByDepartment(node.objectDetails.id).subscribe((response: Response<Category[]>) => {
+        if (response && response.responseCode === 'SUCCESS' && response.data) {
+          let data = response.data.map((obj: Category) => {
+            let objectDetails: ObjectDetails = {
+              id: obj.id,
+              name: obj.name,
+              type: 'CATEGORY',
+              showExpand: true,
+              children: []
+            }
+            return objectDetails;
+          });
+          resolve(data);
+        } else {
+          resolve([]);
+        }
+      }, reject);
+    });
+  }
+
+  public loadSubCategoryNodes(node: DynamicFlatNode): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this._subCategoryService.getByCategory(node.objectDetails.id).subscribe((response: Response<SubCategory[]>) => {
+        if (response && response.responseCode === 'SUCCESS' && response.data) {
+          let data = response.data.map((obj: SubCategory) => {
+            let objectDetails: ObjectDetails = {
+              id: obj.id,
+              name: obj.name,
+              type: 'SUB_CATEGORY',
+              showExpand: true,
+              children: []
+            }
+            return objectDetails;
+          });
+          resolve(data);
+        } else {
+          resolve([]);
+        }
+      }, reject);
+    });
   }
 }

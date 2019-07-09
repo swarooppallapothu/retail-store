@@ -18,6 +18,9 @@ import { LocationViewComponent } from './modules/retail-home/location-view/locat
 import { DepartmentViewComponent } from './modules/retail-home/department-view/department-view.component';
 import { LocationService } from './services/location.service';
 import { DepartmentService } from './services/department.service';
+import { CategoryService } from './services/category.service';
+import { SubCategoryService } from './services/sub-category.service';
+import { SkuDetailsService } from './services/sku-details.service';
 
 @NgModule({
   declarations: [
@@ -44,7 +47,7 @@ import { DepartmentService } from './services/department.service';
     MatButtonModule,
     MatProgressBarModule
   ],
-  providers: [LocationService, DepartmentService],
+  providers: [LocationService, DepartmentService, CategoryService, SubCategoryService, SkuDetailsService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -4,10 +4,10 @@ import { HttpClient } from "@angular/common/http";
 import { Observable } from 'rxjs';
 
 @Injectable()
-export class DepartmentService {
+export class SubCategoryService {
 
     api: string = environment.api;
-    entity: string = `${this.api}/department`;
+    entity: string = `${this.api}/sub-category`;
 
     constructor(private http: HttpClient) {
 
@@ -17,8 +17,8 @@ export class DepartmentService {
         return this.http.get(`${this.entity}/all`);
     }
 
-    getByLocation(locationId: string): Observable<any> {
-        return this.http.get(`${this.entity}/location/${locationId}`);
+    getByCategory(categoryId: string): Observable<any> {
+        return this.http.get(`${this.entity}/category/${categoryId}`);
     }
 
 }
