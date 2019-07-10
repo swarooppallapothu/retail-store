@@ -1,0 +1,36 @@
+<div class="page-layout carded fullwidth inner-scroll">
+
+
+  <mat-card class="example-card">
+    <mat-card-content>
+      <form name="loginForm" [formGroup]="loginForm" (ngSubmit)="login()" novalidate class="details-form"
+        fxLayout="column" fxFlex>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Username</mat-label>
+          <input matInput formControlName="username">
+          <mat-icon matSuffix class="secondary-text">mail</mat-icon>
+
+          <mat-error *ngIf="!loginForm.get('username').hasError('required')">
+            Please enter a Username
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Password</mat-label>
+          <input matInput type="password" formControlName="password">
+          <mat-icon matSuffix class="secondary-text">vpn_key</mat-icon>
+          <mat-error>
+            Password is required
+          </mat-error>
+        </mat-form-field>
+        <button mat-raised-button color="accent" class="submit-button" aria-label="LOGIN"
+          [disabled]="loginForm.invalid">
+          LOGIN
+        </button>
+
+      </form>
+    </mat-card-content>
+  </mat-card>
+
+</div>

@@ -6,11 +6,18 @@ import { DepartmentViewComponent } from './modules/retail-home/department-view/d
 import { RootViewComponent } from './modules/retail-home/root-view/root-view.component';
 import { CategoryViewComponent } from './modules/retail-home/category-view/category-view.component';
 import { SubCategoryViewComponent } from './modules/retail-home/sub-category-view/sub-category-view.component';
+import { LoginComponent } from './modules/public/login/login.component';
+import { AuthGuard } from './services/auth.guard';
 
 const routes: Routes = [
   {
+    path: 'login',
+    component: LoginComponent
+  },
+  {
     path: 'retail-home',
     component: RetailHomeComponent,
+    canActivate: [AuthGuard],
     children: [                          //<---- child components declared here
       {
         path: 'root-view',

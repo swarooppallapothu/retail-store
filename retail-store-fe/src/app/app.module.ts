@@ -2,7 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FlexLayoutModule } from '@angular/flex-layout';
@@ -31,6 +31,10 @@ import { CategoryDetailsComponent } from './modules/retail-home/category-view/ca
 import { SubCategoryDetailsComponent } from './modules/retail-home/sub-category-view/sub-category-details/sub-category-details.component';
 import { SkuDetailsComponent } from './modules/retail-home/sku-details-view/sku-details/sku-details.component';
 import { ObjectTreeService } from './services/object-tree.service';
+import { LoginComponent } from './modules/public/login/login.component';
+import { AuthenticationService } from './services/authentication.service';
+import { RequestInterceptor } from './services/http.interceptor';
+import { AuthGuard } from './services/auth.guard';
 
 
 @NgModule({
@@ -47,7 +51,8 @@ import { ObjectTreeService } from './services/object-tree.service';
     DepartmentDetailsComponent,
     CategoryDetailsComponent,
     SubCategoryDetailsComponent,
-    SkuDetailsComponent
+    SkuDetailsComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,
@@ -73,7 +78,19 @@ import { ObjectTreeService } from './services/object-tree.service';
     MatFormFieldModule,
     MatInputModule
   ],
-  providers: [LocationService, DepartmentService, CategoryService, SubCategoryService, SkuDetailsService, ObjectTreeService],
+  providers: [LocationService,
+    DepartmentService,
+    CategoryService,
+    SubCategoryService,
+    SkuDetailsService,
+    ObjectTreeService,
+    AuthenticationService,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: RequestInterceptor,
+      multi: true,
+    },
+    AuthGuard],
   bootstrap: [AppComponent],
   entryComponents: [LocationDetailsComponent, DepartmentDetailsComponent, CategoryDetailsComponent, SubCategoryDetailsComponent, SkuDetailsComponent]
 })
