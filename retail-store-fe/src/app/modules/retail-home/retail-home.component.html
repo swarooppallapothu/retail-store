@@ -1,0 +1,8 @@
+<mat-sidenav-container fxFlex>
+  <mat-sidenav mode="side" align="end" opened class="mat-elevation-z6">
+    <app-objects-tree (onNodeClickEvent)="onObjectsTreeNodeClick($event)"></app-objects-tree>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <router-outlet></router-outlet>
+  </mat-sidenav-content>
+</mat-sidenav-container>

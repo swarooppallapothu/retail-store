@@ -1,0 +1,11 @@
+/* app-retail-home {
+    height: 100%;
+} */
+
+mat-sidenav {
+    width: 25vw;
+}
+
+app-retail-home {
+    width: 100%;
+}
