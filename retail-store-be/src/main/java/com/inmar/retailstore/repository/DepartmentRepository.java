@@ -16,5 +16,5 @@ import java.util.UUID;
 public interface DepartmentRepository extends JpaRepository<Department, UUID>, JpaSpecificationExecutor<Department> {
 
     @Query(value = "FROM Department WHERE location.id = ?1")
-    public List<Department> getAllByLocation(UUID locationId);
+    List<Department> getAllByLocation(UUID locationId);
 }

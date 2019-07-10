@@ -16,5 +16,5 @@ import java.util.UUID;
 public interface SubCategoryRepository extends JpaRepository<SubCategory, UUID>, JpaSpecificationExecutor<SubCategory> {
 
     @Query(value = "FROM SubCategory WHERE category.id = ?1")
-    public List<SubCategory> getAllByCategory(UUID categoryId);
+    List<SubCategory> getAllByCategory(UUID categoryId);
 }

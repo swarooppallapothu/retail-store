@@ -16,5 +16,5 @@ import java.util.UUID;
 public interface CategoryRepository extends JpaRepository<Category, UUID>, JpaSpecificationExecutor<Category> {
 
     @Query(value = "FROM Category WHERE department.id = ?1")
-    public List<Category> getAllByDepartment(UUID departmentId);
+    List<Category> getAllByDepartment(UUID departmentId);
 }
